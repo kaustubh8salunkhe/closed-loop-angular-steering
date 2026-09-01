@@ -1,0 +1,16 @@
+model:
+  name: "google/gemma-7b"
+  torch_dtype: "bfloat16"
+  device: "cuda"
+
+steering:
+  layer_start: 12
+  layer_end: 22
+  pca_components: 256
+  pid_params:
+    kp: 0.8
+    ki: 0.1
+    kd: 0.05
+    theta_max_deg: 45.0
+    alpha: 5.0
+    tau: 0.1
