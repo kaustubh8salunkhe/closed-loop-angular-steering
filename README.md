@@ -26,7 +26,13 @@ Rooted in the Deep Rendering Mixture Model (DRMM), modeling the safety behaviors
 Standard activation addition and directional ablation operate by scaling or removing components, which can disrupt activation norms and degrade coherence. To prevent this, we construct a fixed two-dimensional steering subspace. We perform Principal Component Analysis (PCA) on candidate feature directions across layers and use Gram-Schmidt orthogonalization to establish an orthonormal basis consisting of the target feature direction and its primary axis of variation. 
 
 3)**Phase 3: Closed-Loop PID Control:**
-Treating the activation steering as a continuous-time dynamical system governed by a state-space model rather than relying on static algebraic manipulation. Because standard steering acts as a simple Proportional (P) controller that is prone to steady-state errors, we implement a multi-layer Proportional-Integral-Derivative (PID) feedback controller:  Proportional (P): Reacts immediately to errors to align activations with the target semantic direction.  Integral (I): Accumulates past errors to remove residual bias across transformer layers.  Derivative (D): Dampens rapid activation changes to mitigate the overshooting typically caused by the integral term.  
+Treating the activation steering as a continuous-time dynamical system governed by a state-space model rather than relying on static algebraic manipulation. Because standard steering acts as a simple Proportional (P) controller that is prone to steady-state errors, we implement a multi-layer Proportional-Integral-Derivative (PID) feedback controller: 
+
+Proportional (P): Reacts immediately to errors to align activations with the target semantic direction.  
+
+Integral (I): Accumulates past errors to remove residual bias across transformer layers.  
+
+Derivative (D): Dampens rapid activation changes to mitigate the overshooting typically caused by the integral term.  
 
 4)**Phase 4: Adaptive Angular Rotation:**
 The output of the PID controller modulates a dynamic rotation angle $\theta$. Rather than applying this rotation uniformly, we use an adaptive conditional mask based on the activation's projection onto the feature direction. The model's intermediate activations are rotated strictly within the 2D subspace, and only when they are positively aligned with the nuisance direction. This strictly preserves the $L_2$ norm of the activation and minimizes interference with unrelated semantic features. 
