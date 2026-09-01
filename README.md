@@ -14,3 +14,30 @@ The architecture couples lightweight representation compression with a multi-lay
 
 ## Evaluation
 The system is evaluated on autonomous scientific workflows to prove robustness against adversarial exploitation (WMDP benchmark) while preserving complex reasoning capabilities (MMLU benchmark).
+
+
+## Repository Architecture
+closed-loop-angular-steering/
+├── README.md                      # Academic abstract, formal methodology, benchmark tables
+├── requirements.txt               # torch>=2.2.0, transformers>=4.38.0, datasets, scikit-learn
+├── configs/
+│   ├── gemma_7b_config.yaml       # Layer bounds, target dims, PID gains (Kp, Ki, Kd)
+│   └── eval_benchmarks.yaml       # WMDP, MMLU, GSM8K evaluation hyperparameters
+├── src/
+│   ├── __init__.py
+│   ├── extraction/
+│   │   ├── contrastive_loader.py  # Pairwise scientific vs hazardous prompt loader
+│   │   └── extract_nuisance.py    # Mean-difference extractor & PCA subspace builder
+│   ├── steering/
+│   │   ├── pid_controller.py      # Stateful discrete PID state tracking across layers
+│   │   ├── angular_rotator.py     # Norm-preserving 2D Givens/subspace rotation logic
+│   │   └── hooks.py               # PyTorch multi-layer forward hook registry
+│   ├── agents/
+│   │   ├── scientific_agent.py    # Multi-step tool-use loop (Python REPL + Chem/Bio tools)
+│   │   └── attack_simulator.py    # GCG & AutoDAN adversarial jailbreak injectors
+│   └── evaluation/
+│       ├── metrics.py             # Cosine drift, KL divergence, refusal accuracy
+│       └── run_benchmarks.py      # WMDP bio/chem/cyber vs MMLU capability pipeline
+└── scripts/
+    ├── run_extraction.sh          # Pipeline: Extract vectors -> Fit PCA
+    └── run_closed_loop_eval.sh    # Pipeline: Evaluate agent across PID grid search
