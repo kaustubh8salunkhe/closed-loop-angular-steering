@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
-from pid_controller import LayerPIDController
-from angular_rotator import adaptive_angular_steering
+from .pid_controller import LayerPIDController
+from .angular_rotator import adaptive_angular_steering
 
 class ClosedLoopSteeringEngine:
     def __init__(self, model: nn.Module, b1: torch.Tensor, b2: torch.Tensor, pid_params: dict, layer_range: list):
